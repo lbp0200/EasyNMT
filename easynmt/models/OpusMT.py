@@ -1,8 +1,9 @@
-import time
-from transformers import MarianMTModel, MarianTokenizer
-import torch
-from typing import List
 import logging
+import time
+from typing import List
+
+import torch
+from transformers import MarianMTModel, MarianTokenizer
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +19,7 @@ class OpusMT:
             self.models[model_name]['last_loaded'] = time.time()
             return self.models[model_name]['tokenizer'], self.models[model_name]['model']
         else:
-            logger.info("Load model: "+model_name)
+            logger.info("Load model: " + model_name)
             tokenizer = MarianTokenizer.from_pretrained(model_name)
             model = MarianMTModel.from_pretrained(model_name)
             model.eval()
@@ -35,11 +36,16 @@ class OpusMT:
             self.models[model_name] = {'tokenizer': tokenizer, 'model': model, 'last_loaded': time.time()}
             return tokenizer, model
 
-    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str, beam_size: int = 5, **kwargs):
+    def translate_sentences(self, sentences: List[str], source_lang: str, target_lang: str, device: str,
+                            beam_size: int = 5, **kwargs):
         model_name = 'Helsinki-NLP/opus-mt-{}-{}'.format(source_lang, target_lang)
         tokenizer, model = self.load_model(model_name)
         model.to(device)
-
+        if device == 'cpu':
+            from cpufeature.extension import CPUFeature
+            if CPUFeature.get('AVX512f'):
+                import intel_extension_for_pytorch as ipex
+                model = ipex.optimize(model)
         inputs = tokenizer(sentences, truncation=True, padding=True, max_length=self.max_length, return_tensors="pt")
 
         for key in inputs:
@@ -53,4 +59,3 @@ class OpusMT:
 
     def save(self, output_path):
         return {"max_loaded_models": self.max_loaded_models}
-
