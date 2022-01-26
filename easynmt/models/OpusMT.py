@@ -41,11 +41,6 @@ class OpusMT:
         model_name = 'Helsinki-NLP/opus-mt-{}-{}'.format(source_lang, target_lang)
         tokenizer, model = self.load_model(model_name)
         model.to(device)
-        if device == 'cpu':
-            from cpufeature.extension import CPUFeature
-            if CPUFeature.get('AVX512f'):
-                import intel_extension_for_pytorch as ipex
-                model = ipex.optimize(model)
         inputs = tokenizer(sentences, truncation=True, padding=True, max_length=self.max_length, return_tensors="pt")
 
         for key in inputs:
