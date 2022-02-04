@@ -22,7 +22,10 @@ setup(
         'numpy',
         'nltk',
         'sentencepiece',
-        'fasttext'
+        'fasttext',
+        'langdetect',
+        'langid',
+        'thai_segmenter'
     ],
     classifiers=[
         "Development Status :: 4 - Beta",

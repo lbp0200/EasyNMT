@@ -34,7 +34,9 @@ class EasyNMT:
         """
         self._model_name = model_name
         self._fasttext_lang_id = None
+        self._gcld3_lang_id = None
         self._lang_detectors = [
+            self.language_detection_gcld3,
             self.language_detection_fasttext,
             self.language_detection_langid,
             self.language_detection_langdetect,
@@ -53,7 +55,7 @@ class EasyNMT:
             else:
                 cache_folder = os.path.join(torch.hub._get_torch_home(), 'easynmt_v2')
         self._cache_folder = cache_folder
-
+        print(cache_folder)
         if translator is not None:
             self.translator = translator
         else:
@@ -428,6 +430,16 @@ class EasyNMT:
 
         raise Exception(
             "No method for automatic language detection was found. Please install at least one of the following: fasttext (pip install fasttext), langid (pip install langid), or langdetect (pip install langdetect)")
+
+    def language_detection_gcld3(self, text: str) -> str:
+        """
+        """
+        if self._gcld3_lang_id is None:
+            import gcld3
+            self._gcld3_lang_id = gcld3.NNetLanguageIdentifier(min_num_bytes=0,
+                                                               max_num_bytes=5120)
+        result = self._gcld3_lang_id.FindLanguage(text=text.lower().replace("\r\n", " ").replace("\n", " ").strip())
+        return result.language
 
     def language_detection_fasttext(self, text: str) -> str:
         """

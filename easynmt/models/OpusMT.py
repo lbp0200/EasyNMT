@@ -15,6 +15,7 @@ class OpusMT:
         self.max_length = None
 
     def load_model(self, model_name):
+        print(model_name)
         if model_name in self.models:
             self.models[model_name]['last_loaded'] = time.time()
             return self.models[model_name]['tokenizer'], self.models[model_name]['model']

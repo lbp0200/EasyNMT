@@ -4,15 +4,14 @@ This script show how we can do translation using multiple processes
 Usage:
 python translation_speed.py model_name
 """
-import os
-from easynmt import util, EasyNMT
-import gzip
 import csv
+import gzip
+import logging
+import os
 import sys
 import time
-import logging
 
-
+from easynmt import util, EasyNMT
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -62,14 +61,17 @@ if __name__ == '__main__':
     # and on which devices the processes should run
     process_pool = model.start_multi_process_pool(['cuda', 'cuda'])
 
-    #Do some warm-up
-    model.translate_multi_process(process_pool, sentences[0:100], source_lang='en', target_lang='de', show_progress_bar=False)
+    # Do some warm-up
+    model.translate_multi_process(process_pool, sentences[0:100], source_lang='en', target_lang='de',
+                                  show_progress_bar=False)
 
     # Start translation speed measure - Multi process
     start_time = time.time()
-    translations_multi_p = model.translate_multi_process(process_pool, sentences, source_lang='en', target_lang='de', show_progress_bar=True)
+    translations_multi_p = model.translate_multi_process(process_pool, sentences, source_lang='en', target_lang='de',
+                                                         show_progress_bar=True)
     end_time = time.time()
-    print("Multi-Process translation done after {:.2f} sec. {:.2f} sentences / second".format(end_time - start_time, len(sentences) / (end_time - start_time)))
-
+    print("Multi-Process translation done after {:.2f} sec. {:.2f} sentences / second".format(end_time - start_time,
+                                                                                              len(sentences) / (
+                                                                                                          end_time - start_time)))
 
     model.stop_multi_process_pool(process_pool)

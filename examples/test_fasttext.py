@@ -1,5 +1,6 @@
-from ftlangdetect import detect
+import fasttext
 
+fasttext.FastText.print_function
 result = detect(text="薄雾", low_memory=False)
 print(result)
 
