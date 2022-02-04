@@ -20,7 +20,8 @@ sentences = [
 target_lang = 'en'  # We want to translate the sentences to German (de)
 source_lang = 'zh'  # We want to translate the sentences to German (de)
 
-model = EasyNMT('opus-mt')
+# model = EasyNMT('opus-mt')
+model = EasyNMT('m2m_100_418M')
 # model = EasyNMT('m2m_100_1.2B')
 
 print(datetime.datetime.now())

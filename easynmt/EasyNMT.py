@@ -55,7 +55,6 @@ class EasyNMT:
             else:
                 cache_folder = os.path.join(torch.hub._get_torch_home(), 'easynmt_v2')
         self._cache_folder = cache_folder
-        print(cache_folder)
         if translator is not None:
             self.translator = translator
         else:

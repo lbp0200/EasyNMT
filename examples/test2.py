@@ -1,3 +1,6 @@
+# PYTHONPATH=$PWD python examples/test2.py m2m_100_418M
+# PYTHONPATH=$PWD python examples/test2.py m2m_100_1.2B
+# PYTHONPATH=$PWD python examples/test2.py opus-mt
 import sys
 import time
 
