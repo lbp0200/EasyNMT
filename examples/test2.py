@@ -10,7 +10,7 @@ a = 'An older man dressed in blue historical clothing is ringing a bell in his r
 model = EasyNMT(sys.argv[1])
 
 sentences = []
-for i in range(100):
+for i in range(1000):
     sentences.append(a)
 
 start_time = time.time()
