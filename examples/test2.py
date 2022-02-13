@@ -14,7 +14,7 @@ for i in range(1000):
     sentences.append(a)
 
 start_time = time.time()
-model.translate(sentences, source_lang='en', target_lang='de', show_progress_bar=True,
+model.translate(sentences, source_lang='en', target_lang='de', show_progress_bar=True, batch_size=32,
                 perform_sentence_splitting=False)
 end_time = time.time()
 print("Done after {:.2f} sec. {:.2f} sentences / second".format(end_time - start_time,
